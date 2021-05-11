@@ -49,12 +49,9 @@ func saveFileHandler(c *gin.Context) {
 		return
 	}
 
-	// formatting file hierarchy
-	fileEndpointPath := fmt.Sprintf("%d-%02d-%02d-%s", now.Year(), now.Month(), now.Day(), newFileName)
-
 	// File saved successfully. Return proper result
 	c.JSON(http.StatusOK, gin.H{
-		"message": fileEndpointPath,
+		"message": destination,
 	})
 }
 
@@ -71,6 +68,7 @@ func seed() {
 func main() {
 	r := gin.Default()
 	r.POST("/uploads/image", saveFileHandler)
+	r.StaticFS("/uploads", http.Dir(UPLOAD_DIR)) // `/uploads` should be same as UPLOAD_DIR value
 
 	seed()
 
